@@ -68,41 +68,47 @@
 		)
 		);
 
-		if(!is_array($result->ExecuteQueryResult->trackingData->TrackingData))
-			array_push($guias, $result->ExecuteQueryResult->trackingData->TrackingData);
-		else
-			$guias = $result->ExecuteQueryResult->trackingData->TrackingData;
-		
-		foreach ($guias as $value) {
+		if($result->ExecuteQueryResult->errorCode==0){//no hubo error
+
+			if(!is_array($result->ExecuteQueryResult->trackingData->TrackingData))
+				array_push($guias, $result->ExecuteQueryResult->trackingData->TrackingData);
+			else
+				$guias = $result->ExecuteQueryResult->trackingData->TrackingData;
 			
-			if(isset($value->waybill) ){
+			foreach ($guias as $value) {
+				
+				if(isset($value->waybill) ){
 
-				$information = array();
-				$information['waybill'] = $value->waybill;
-				$information['shortWaybillId'] = isset($value->shortWaybillId)?$value->shortWaybillId:"";
-				$information['serviceId'] = isset($value->serviceId)?$value->serviceId:"";
-				$information['serviceDescriptionSPA'] = isset($value->serviceDescriptionSPA)?$value->serviceDescriptionSPA:"";
-				$information['serviceDescriptionENG'] = isset($value->serviceDescriptionENG)?$value->serviceDescriptionENG:"";
-				$information['customerNumber'] = isset($value->customerNumber)?$value->customerNumber:"";
-				$information['packageType'] = isset($value->packageType)?$value->packageType:"";
-				$information['additionalInformation'] = isset($value->additionalInformation)?$value->additionalInformation:"";
-				$information['statusSPA'] = isset($value->statusSPA)?$value->statusSPA:"";
-				$information['statusENG'] = isset($value->statusENG)?$value->statusENG:"";
-				$information['destinationAcronym'] = isset($value->deliveryData->destinationAcronym)?$value->deliveryData->destinationAcronym:"";
-				$information['destinationName'] = isset($value->deliveryData->destinationName)?$value->deliveryData->destinationName:"";
-				$information['deliveryDateTime'] = isset($value->deliveryData->deliveryDateTime)?$value->deliveryData->deliveryDateTime:"";
-				$information['zipCode'] = isset($value->deliveryData->zipCode)?$value->deliveryData->zipCode:"";
-				$information['receiverName'] = isset($value->deliveryData->receiverName)?$value->deliveryData->receiverName:"";
+					$information = array();
+					$information['waybill'] = $value->waybill;
+					$information['shortWaybillId'] = isset($value->shortWaybillId)?$value->shortWaybillId:"";
+					$information['serviceId'] = isset($value->serviceId)?$value->serviceId:"";
+					$information['serviceDescriptionSPA'] = isset($value->serviceDescriptionSPA)?$value->serviceDescriptionSPA:"";
+					$information['serviceDescriptionENG'] = isset($value->serviceDescriptionENG)?$value->serviceDescriptionENG:"";
+					$information['customerNumber'] = isset($value->customerNumber)?$value->customerNumber:"";
+					$information['packageType'] = isset($value->packageType)?$value->packageType:"";
+					$information['additionalInformation'] = isset($value->additionalInformation)?$value->additionalInformation:"";
+					$information['statusSPA'] = isset($value->statusSPA)?$value->statusSPA:"";
+					$information['statusENG'] = isset($value->statusENG)?$value->statusENG:"";
+					$information['destinationAcronym'] = isset($value->deliveryData->destinationAcronym)?$value->deliveryData->destinationAcronym:"";
+					$information['destinationName'] = isset($value->deliveryData->destinationName)?$value->deliveryData->destinationName:"";
+					$information['deliveryDateTime'] = isset($value->deliveryData->deliveryDateTime)?$value->deliveryData->deliveryDateTime:"";
+					$information['zipCode'] = isset($value->deliveryData->zipCode)?$value->deliveryData->zipCode:"";
+					$information['receiverName'] = isset($value->deliveryData->receiverName)?$value->deliveryData->receiverName:"";
 
-				$response[$value->waybill] = $information;
+					$response[$value->waybill] = $information;
 
+				}
 			}
+
+			echo "<pre>";
+			print_r($response);
+			echo "</pre>";
+		
+		}else{
+			echo 'Ocurrio un error, codigo de error: ' . $result->ExecuteQueryResult->errorCode.' Mensaje:'.$result->ExecuteQueryResult->errorCodeDescriptionSPA. "\n";
 		}
 
-		echo "<pre>";
-		print_r($response);
-		echo "</pre>";
-		
 	} catch (Exception $e) {
 	    echo 'Excepcion capturada: ' . $e->getMessage(). "\n";
 	}
